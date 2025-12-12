@@ -12,7 +12,7 @@ class CategoryUnitTest extends TestCase
         $category = new Category(
             id: 'teste',
             name: 'New Cat',
-            descripition: 'New desc',
+            description: 'New desc',
             isActive: true
         );
         $this->assertEquals("teste", $category->id);
