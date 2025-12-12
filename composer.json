@@ -1,0 +1,18 @@
+{
+    "name": "felipefsa03/app-php-catalog-video",
+    "description": "App with PHP - Catalog Video",
+    "authors": [
+        {
+            "name": "Luis Felipe de Araujo Lima",
+            "email": "limalipe355@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4":{
+            "Core\\": "src/Core"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^10.5"
+    }
+}
