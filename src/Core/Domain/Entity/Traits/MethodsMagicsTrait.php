@@ -2,15 +2,16 @@
 
 namespace Core\Domain\Entity\Traits;
 
-use mysql_xdevapi\Exception;
-trait MethodsMagicsTrait{
-    public function __get($name)
+trait MethodsMagicsTrait
+{
+    public function __get($property)
     {
-        if($this->{$propery})
-            return $this->{$name};
-
+        if (isset($this->{$property})) {
+            return $this->{$property};
+        }
 
         $className = get_class($this);
-        throw new Exception("Property {$propery} not found in class {$className} " );
+        throw new \Exception("Property {$property} not found in class {$className} " );
+
     }
 }
