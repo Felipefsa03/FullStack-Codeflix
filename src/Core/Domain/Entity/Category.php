@@ -3,33 +3,39 @@
 namespace Core\Domain\Entity;
 
 use Core\Domain\Entity\Traits\MethodsMagicsTrait;
-use Core\Domain\Exception\EntityValidationException;
+use Core\Domain\Validation\DomainValidation;
+use Core\Domain\ValueObject\Uuid;
+use DateTime;
 
 class Category
 {
     use MethodsMagicsTrait;
 
-    /**
-     * @throws EntityValidationException
-     */
     public function __construct(
-        protected string $id = '',
+        protected Uuid|string $id = '',
         protected string $name = '',
         protected string $description = '',
-        protected bool $isActive = true)
-    {
+        protected bool $isActive = true,
+        protected DateTime|string $createdAt = '',
+    ) {
+        $this->id = $this->id ? new Uuid($this->id) : Uuid::random();
+        $this->createdAt = $this->createdAt ? new DateTime($this->createdAt) : new DateTime();
+
         $this->validate();
     }
+
+
     public function activate(): void
     {
         $this->isActive = true;
     }
-    public function desable(): void
+
+    public function disable(): void
     {
         $this->isActive = false;
     }
 
-    public function update(string $name, string $description = ''): void
+    public function update(string $name, string $description = '')
     {
         $this->name = $name;
         $this->description = $description;
@@ -37,26 +43,10 @@ class Category
         $this->validate();
     }
 
-    /**
-     * @throws EntityValidationException
-     */
-    public function validate(): void
+    protected function validate()
     {
-        // NAME
-        if (trim($this->name) === '') {
-            throw new EntityValidationException("nome invalido");
-        }
-
-        if (strlen($this->name) < 3 || strlen($this->name) > 255) {
-            throw new EntityValidationException("nome invalido");
-        }
-
-        // DESCRIPTION (opcional, mas valida tamanho)
-        if ($this->description !== '' && strlen($this->description) > 255) {
-            throw new EntityValidationException("Descrição invalida");
-        }
+        DomainValidation::strMaxLength($this->name);
+        DomainValidation::strMinLength($this->name);
+        DomainValidation::strCanNullAndMaxLength($this->description);
     }
-
-
-
 }
